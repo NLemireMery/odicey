@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ mode.name }}{% endblock %}
+
+{% block body %}
+    <h1 class="mt-3 mx-3">{{ mode.name }}</h1>
+
+    <table class="table table-hover">
+        <tbody>
+            <tr class="table-active">
+                <th scope="col">Id</th>
+                <td>{{ mode.id }}</td>
+            </tr>
+            <tr class="table-active">
+                <th scope="col">Nom</th>
+                <td>{{ mode.name }}</td>
+            </tr>
+            <tr class="table-active">
+                <th scope="col">Statistiques</th>
+                <td>{{ mode.jsonstats ? mode.jsonstats|json_encode : '' }}</td>
+            </tr>
+            <tr class="table-active">
+                <th scope="col">Parties</th>
+                <td>
+                    {% if mode.games is not empty %}
+                        {% for game in mode.games %}
+                            <span class="bold-text">{{ game.dm.login }}</span>
+                            est le maître de jeu de la partie : <span class="bold-text">{{game.name}}</span>
+                            <a href="{{ path('app_backoffice_game_getGamesById', {'id': game.id}) }}"><i class="bi bi-eye btn btn-sm btn-success rounded"></i></a>
+                            <a href="{{ path('app_backoffice_game_editGames', {'id': game.id}) }}"><i class="bi bi-pencil btn btn-sm btn-warning rounded"></i></a>
+                            <br>
+                        {% endfor %}
+                    {% else %}
+                    Aucune partie associée à ce mode de jeu.
+                    {% endif %}
+                </td>
+            </tr>
+
+            
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_backoffice_mode_getModes') }}" class="btn btn-sm btn-outline-info mx-3">Retour à la liste</a>
+
+    <a href="{{ path('app_backoffice_mode_editModes', {'id': mode.id}) }}" class="btn btn-sm btn-outline-warning mx-3">Modifier</a>
+{% endblock %}

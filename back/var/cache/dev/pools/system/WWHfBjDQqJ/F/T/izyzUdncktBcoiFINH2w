@@ -1,0 +1,32 @@
+<?php //App%255CController%255CBackoffice%255CCharacterController%2523deleteCharacters
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Symfony\\Component\\Routing\\Annotation\\Route'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Routing\\Annotation\\Route')),
+    ],
+    null,
+    [
+        'Symfony\\Component\\Routing\\Annotation\\Route' => [
+            'path' => [
+                '/backoffice/characters/{id}',
+            ],
+            'name' => [
+                'app_backoffice_character_deleteCharacters',
+            ],
+            'requirements' => [
+                [
+                    'id' => '\\d+',
+                ],
+            ],
+            'methods' => [
+                [
+                    'POST',
+                ],
+            ],
+        ],
+    ],
+    [
+        $o[0],
+    ],
+    []
+); }];

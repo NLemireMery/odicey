@@ -1,0 +1,49 @@
+<?php //App%255CController%255CGameController%2523deleteGameUser
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Routing\\Annotation\\Route'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Routing\\Annotation\\Route')),
+        clone ($p['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter')),
+        clone $p['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter'],
+    ],
+    null,
+    [
+        'Symfony\\Component\\Routing\\Annotation\\Route' => [
+            'path' => [
+                '/api/games/{id}/users/{user_id}',
+            ],
+            'name' => [
+                'app_api_game_deleteGameUser',
+            ],
+            'methods' => [
+                [
+                    'DELETE',
+                ],
+            ],
+        ],
+        'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter' => [
+            'name' => [
+                1 => 'game',
+                'user',
+            ],
+            'options' => [
+                1 => [
+                    'mapping' => [
+                        'id' => 'id',
+                    ],
+                ],
+                [
+                    'mapping' => [
+                        'user_id' => 'id',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    [
+        $o[0],
+        $o[1],
+        $o[2],
+    ],
+    []
+); }];
