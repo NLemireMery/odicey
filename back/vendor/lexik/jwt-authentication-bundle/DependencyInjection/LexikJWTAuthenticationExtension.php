@@ -26,7 +26,7 @@ class LexikJWTAuthenticationExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container): void
+    public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -99,7 +99,7 @@ class LexikJWTAuthenticationExtension extends Extension
         $container->setParameter('lexik_jwt_authentication.encoder.signature_algorithm', $encoderConfig['signature_algorithm']);
         $container->setParameter('lexik_jwt_authentication.encoder.crypto_engine', $encoderConfig['crypto_engine']);
 
-        $tokenExtractors = $this->createTokenExtractors($container, $config['token_extractors']);
+        $tokenExtractors = self::createTokenExtractors($container, $config['token_extractors']);
         $container
             ->getDefinition('lexik_jwt_authentication.extractor.chain_extractor')
             ->replaceArgument(0, $tokenExtractors);
@@ -144,11 +144,11 @@ class LexikJWTAuthenticationExtension extends Extension
                 ->replaceArgument(4, $encoderConfig['signature_algorithm']);
         }
 
-        if ($this->isConfigEnabled($container, $config['api_platform'])) {
-            if (!class_exists(ApiPlatformBundle::class)) {
-                throw new LogicException('API Platform cannot be detected. Try running "composer require api-platform/core".');
-            }
+        if (!class_exists(ApiPlatformBundle::class) && (isset($config['api_platform']['check_path']) || isset($config['api_platform']['username_path']) || isset($config['api_platform']['password_path']))) {
+            throw new LogicException('API Platform cannot be detected. Try running "composer require api-platform/core".');
+        }
 
+        if (class_exists(ApiPlatformBundle::class)) {
             $loader->load('api_platform.xml');
 
             $container
@@ -159,11 +159,11 @@ class LexikJWTAuthenticationExtension extends Extension
         }
     }
 
-    private function createTokenExtractors(ContainerBuilder $container, array $tokenExtractorsConfig): array
+    private static function createTokenExtractors(ContainerBuilder $container, array $tokenExtractorsConfig)
     {
         $map = [];
 
-        if ($this->isConfigEnabled($container, $tokenExtractorsConfig['authorization_header'])) {
+        if ($tokenExtractorsConfig['authorization_header']['enabled']) {
             $authorizationHeaderExtractorId = 'lexik_jwt_authentication.extractor.authorization_header_extractor';
             $container
                 ->getDefinition($authorizationHeaderExtractorId)
@@ -173,7 +173,7 @@ class LexikJWTAuthenticationExtension extends Extension
             $map[] = new Reference($authorizationHeaderExtractorId);
         }
 
-        if ($this->isConfigEnabled($container, $tokenExtractorsConfig['query_parameter'])) {
+        if ($tokenExtractorsConfig['query_parameter']['enabled']) {
             $queryParameterExtractorId = 'lexik_jwt_authentication.extractor.query_parameter_extractor';
             $container
                 ->getDefinition($queryParameterExtractorId)
@@ -182,7 +182,7 @@ class LexikJWTAuthenticationExtension extends Extension
             $map[] = new Reference($queryParameterExtractorId);
         }
 
-        if ($this->isConfigEnabled($container, $tokenExtractorsConfig['cookie'])) {
+        if ($tokenExtractorsConfig['cookie']['enabled']) {
             $cookieExtractorId = 'lexik_jwt_authentication.extractor.cookie_extractor';
             $container
                 ->getDefinition($cookieExtractorId)
@@ -191,7 +191,7 @@ class LexikJWTAuthenticationExtension extends Extension
             $map[] = new Reference($cookieExtractorId);
         }
 
-        if ($this->isConfigEnabled($container, $tokenExtractorsConfig['split_cookie'])) {
+        if ($tokenExtractorsConfig['split_cookie']['enabled']) {
             $cookieExtractorId = 'lexik_jwt_authentication.extractor.split_cookie_extractor';
             $container
                 ->getDefinition($cookieExtractorId)

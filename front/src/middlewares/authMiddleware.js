@@ -3,6 +3,7 @@ import { CHECK_LOGIN, SUBMIT_LOGIN_FORM, USER_LOGOUT, actionAddError, actionUser
 
 const authMiddleware = (store) => (next) => async (action) => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  console.log(apiUrl);
 
   switch (action.type) {
     case SUBMIT_LOGIN_FORM: {

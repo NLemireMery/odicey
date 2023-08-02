@@ -1,3 +1,31 @@
+# Upgrade to 2.16
+
+## Deprecated `\Doctrine\ORM\Internal\CommitOrderCalculator` and related classes
+
+With changes made to the commit order computation, the internal classes
+`\Doctrine\ORM\Internal\CommitOrderCalculator`, `\Doctrine\ORM\Internal\CommitOrder\Edge`,
+`\Doctrine\ORM\Internal\CommitOrder\Vertex` and `\Doctrine\ORM\Internal\CommitOrder\VertexState`
+have been deprecated and will be removed in ORM 3.0.
+
+## Deprecated returning post insert IDs from `EntityPersister::executeInserts()`
+
+Persisters implementing `\Doctrine\ORM\Persisters\Entity\EntityPersister` should no longer
+return an array of post insert IDs from their `::executeInserts()` method. Make the
+persister call `Doctrine\ORM\UnitOfWork::assignPostInsertId()` instead.
+
+## Changing the way how reflection-based mapping drivers report fields, deprecated the "old" mode
+
+In ORM 3.0, a change will be made regarding how the `AttributeDriver` reports field mappings.
+This change is necessary to be able to detect (and reject) some invalid mapping configurations.
+
+To avoid surprises during 2.x upgrades, the new mode is opt-in. It can be activated on the 
+`AttributeDriver` and `AnnotationDriver` by setting the `$reportFieldsWhereDeclared`
+constructor parameter to `true`. It will cause `MappingException`s to be thrown when invalid
+configurations are detected.
+
+Not enabling the new mode will cause a deprecation notice to be raised. In ORM 3.0, 
+only the new mode will be available.
+
 # Upgrade to 2.15
 
 ## Deprecated configuring `JoinColumn` on the inverse side of one-to-one associations
